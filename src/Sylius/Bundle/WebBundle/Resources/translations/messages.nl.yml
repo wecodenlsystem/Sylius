@@ -132,7 +132,7 @@ sylius:
       index: Promoties
     promotion_coupon:
       index: Coupons
-    property:
+    attribute:
       index: Eigenschappen
     prototype:
       index: Prototypes
@@ -456,7 +456,7 @@ sylius:
     update_header: Betaalmethode bewerken
     updated_at: Laatst bijgewerkt
   product:
-    add_property: Eigenschap toevoegen
+    add_attribute: Eigenschap toevoegen
     available_on: Beschikbaar op
     available_on_demand: Beschikbaar op aanvraag
     categorization: Categorisering
@@ -472,7 +472,7 @@ sylius:
     no_description: '<i>Geen omschrijving...</i>'
     no_images: Er zijn geen afbeeldingen voor dit product
     no_options: Er zijn geen opties voor dit product
-    no_properties: Dit product heeft geen eigenschappen gedefinieerd
+    no_attributes: Dit product heeft geen eigenschappen gedefinieerd
     no_results: Er zijn geen producten om weer te geven.
     no_shipping_category: Geen verzendcategorie
     no_short_description: '<i>Geen korte omschrijving</i>'
@@ -481,7 +481,7 @@ sylius:
     no_taxons: Er zijn geen taxons voor dit product
     options: Opties
     price: Retail prijs
-    properties: Eigenschappen
+    attributes: Eigenschappen
     restricted_zone: Beperkte zone
     shipping_category: Verzend categorie
     show: Bekijk details
@@ -494,7 +494,7 @@ sylius:
       images: Afbeeldingen
       options: Opties
       product: Product
-      properties: Eigenschappen
+      attributes: Eigenschappen
     tax_category: Belasting categorie
     unavailable: Onbeschikbaar
     update_header: Product bewerken
@@ -542,7 +542,7 @@ sylius:
   promotion_rule:
     configuration: Configuratie
     type: Type
-  property:
+  product_attribute:
     add_choice: Keuze toevoegen
     create: Nieuwe eigenschap
     create_header: Nieuwe producteigenschap toevoegen
@@ -563,7 +563,7 @@ sylius:
     name: Naam
     no_results: Er zijn geen prototypes gedefinieerd.
     options: opties
-    properties: eigenschappen
+    attributes: eigenschappen
     update_header: Prototype bewerken
     updated_at: laatst bijgewerkt
   province:
