@@ -12,10 +12,10 @@
 namespace Sylius\Component\Promotion\Checker;
 
 use Sylius\Component\Promotion\Exception\UnsupportedTypeException;
-use Sylius\Component\Promotion\Model\PromotionInterface;
-use Sylius\Component\Promotion\Model\PromotionSubjectInterface;
 use Sylius\Component\Promotion\Model\PromotionCouponAwareSubjectInterface;
 use Sylius\Component\Promotion\Model\PromotionCouponsAwareSubjectInterface;
+use Sylius\Component\Promotion\Model\PromotionInterface;
+use Sylius\Component\Promotion\Model\PromotionSubjectInterface;
 use Sylius\Component\Promotion\Model\RuleInterface;
 use Sylius\Component\Promotion\SyliusPromotionEvents;
 use Sylius\Component\Registry\ServiceRegistryInterface;
@@ -63,16 +63,28 @@ class PromotionEligibilityChecker implements PromotionEligibilityCheckerInterfac
             return false;
         }
 
+        $eligible = true;
+        $eligibleRules = false;
         if ($promotion->hasRules()) {
             foreach ($promotion->getRules() as $rule) {
                 try {
                     if (!$this->isEligibleToRule($subject, $promotion, $rule)) {
                         return false;
                     }
+
+                    $eligibleRules = true;
                 } catch (UnsupportedTypeException $exception) {
+                    if (!$eligibleRules) {
+                        $eligible = false;
+                    }
+
                     continue;
                 }
             }
+        }
+
+        if (!$promotion->isCouponBased()) {
+            return $eligible;
         }
 
         return $this->areCouponsEligibleForPromotion($subject, $promotion);
@@ -100,12 +112,11 @@ class PromotionEligibilityChecker implements PromotionEligibilityCheckerInterfac
         }
 
         if ($subject instanceof PromotionCouponAwareSubjectInterface) {
-            if (null !== $coupon = $subject->getPromotionCoupon() && $promotion === $coupon->getPromotion()) {
+            $coupon = $subject->getPromotionCoupon();
+            if (null !== $coupon && $promotion === $coupon->getPromotion()) {
                 $this->dispatcher->dispatch(SyliusPromotionEvents::COUPON_NOT_ELIGIBLE, new GenericEvent($promotion));
             }
-        }
-
-        if ($subject instanceof PromotionCouponsAwareSubjectInterface) {
+        } elseif ($subject instanceof PromotionCouponsAwareSubjectInterface) {
             foreach ($subject->getPromotionCoupons() as $coupon) {
                 if ($promotion === $coupon->getPromotion()) {
                     $this->dispatcher->dispatch(SyliusPromotionEvents::COUPON_NOT_ELIGIBLE, new GenericEvent($promotion));
@@ -166,24 +177,22 @@ class PromotionEligibilityChecker implements PromotionEligibilityCheckerInterfac
      * @param PromotionSubjectInterface $subject
      * @param PromotionInterface        $promotion
      *
-     * @return Boolean
+     * @return bool
      */
-    private function areCouponsEligibleForPromotion(PromotionSubjectInterface $subject, PromotionInterface $promotion)
+    protected function areCouponsEligibleForPromotion(PromotionSubjectInterface $subject, PromotionInterface $promotion)
     {
-        if (!$promotion->isCouponBased()) {
-            return true;
-        }
-
         $eligible = false;
-
         if ($subject instanceof PromotionCouponAwareSubjectInterface) {
-            if (null !== $coupon = $subject->getPromotionCoupon() && $promotion === $coupon->getPromotion()) {
+            $coupon = $subject->getPromotionCoupon();
+            if (null !== $coupon && $promotion === $coupon->getPromotion()) {
                 $eligible = true;
             }
         } elseif ($subject instanceof PromotionCouponsAwareSubjectInterface) {
             foreach ($subject->getPromotionCoupons() as $coupon) {
                 if ($promotion === $coupon->getPromotion()) {
                     $eligible = true;
+
+                    break;
                 }
             }
         } else {

@@ -74,6 +74,11 @@ fos_user:
         form:
             type: sylius_user_registration
 
+fos_rest:
+    view:
+        formats:
+            json: true
+
 hwi_oauth:
     firewall_name: main
     resource_owners:
@@ -85,6 +90,7 @@ hwi_oauth:
             type:          facebook
             client_id:     %sylius.oauth.facebook.clientid%
             client_secret: %sylius.oauth.facebook.clientsecret%
+            scope:         "email"
         google:
             type:          google
             client_id:     %sylius.oauth.google.clientid%

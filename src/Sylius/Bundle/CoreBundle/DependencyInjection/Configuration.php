@@ -44,8 +44,8 @@ class Configuration implements ConfigurationInterface
 
         $emailNode
             ->addDefaultsIfNotSet()
+            ->canBeEnabled()
             ->children()
-                ->booleanNode('enabled')->defaultFalse()->end()
                 ->arrayNode('from_email')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -57,6 +57,7 @@ class Configuration implements ConfigurationInterface
         ->end();
 
         $this->addEmailConfiguration($emailNode, 'order_confirmation', 'SyliusWebBundle:Frontend/Email:orderConfirmation.html.twig');
+        $this->addEmailConfiguration($emailNode, 'order_comment', 'SyliusWebBundle:Frontend/Email:orderComment.html.twig');
         $this->addEmailConfiguration($emailNode, 'customer_welcome', 'SyliusWebBundle:Frontend/Email:customerWelcome.html.twig');
 
         return $emailNode;
@@ -76,8 +77,8 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode($name)
                 ->addDefaultsIfNotSet()
                 ->canBeUnset()
+                ->canBeEnabled()
                 ->children()
-                    ->booleanNode('enabled')->defaultTrue()->end()
                     ->scalarNode('template')->defaultValue($template)->end()
                     ->arrayNode('from_email')
                     ->canBeUnset()
@@ -123,22 +124,6 @@ class Configuration implements ConfigurationInterface
                                 ->scalarNode('model')->defaultValue('Sylius\Component\Core\Model\Group')->end()
                                 ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
                                 ->scalarNode('form')->defaultValue('Sylius\Bundle\CoreBundle\Form\Type\GroupType')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('block')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('model')->defaultValue('Symfony\Cmf\Bundle\BlockBundle\Doctrine\Phpcr\SimpleBlock')->end()
-                                ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
-                                ->scalarNode('form')->defaultValue('Sylius\Bundle\CoreBundle\Form\Type\BlockType')->end()
-                            ->end()
-                        ->end()
-                        ->arrayNode('page')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('model')->defaultValue('Symfony\Cmf\Bundle\ContentBundle\Doctrine\Phpcr\StaticContent')->end()
-                                ->scalarNode('controller')->defaultValue('Sylius\Bundle\ResourceBundle\Controller\ResourceController')->end()
-                                ->scalarNode('form')->defaultValue('Sylius\Bundle\CoreBundle\Form\Type\PageType')->end()
                             ->end()
                         ->end()
                         ->arrayNode('product_variant_image')

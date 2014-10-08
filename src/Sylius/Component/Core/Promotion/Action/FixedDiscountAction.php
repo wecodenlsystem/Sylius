@@ -11,13 +11,14 @@
 
 namespace Sylius\Component\Core\Promotion\Action;
 
+use Sylius\Component\Core\Model\AdjustmentInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Sylius\Component\Core\Model\OrderItemInterface;
 use Sylius\Component\Promotion\Action\PromotionActionInterface;
 use Sylius\Component\Promotion\Model\PromotionInterface;
 use Sylius\Component\Promotion\Model\PromotionSubjectInterface;
-use Sylius\Component\Resource\Repository\RepositoryInterface;
 use Sylius\Component\Resource\Exception\UnexpectedTypeException;
+use Sylius\Component\Resource\Repository\RepositoryInterface;
 
 /**
  * Fixed discount action.
@@ -58,7 +59,7 @@ class FixedDiscountAction implements PromotionActionInterface
         $adjustment = $this->repository->createNew();
 
         $adjustment->setAmount(-$configuration['amount']);
-        $adjustment->setLabel(OrderInterface::PROMOTION_ADJUSTMENT);
+        $adjustment->setLabel(AdjustmentInterface::PROMOTION_ADJUSTMENT);
         $adjustment->setDescription($promotion->getDescription());
 
         $subject->addAdjustment($adjustment);
@@ -76,7 +77,7 @@ class FixedDiscountAction implements PromotionActionInterface
             );
         }
 
-        $subject->removePromotionAdjustments();
+        $subject->removeAdjustments(AdjustmentInterface::PROMOTION_ADJUSTMENT);
     }
 
     /**

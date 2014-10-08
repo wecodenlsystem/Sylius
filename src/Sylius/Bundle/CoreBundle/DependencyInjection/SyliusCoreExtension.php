@@ -30,6 +30,7 @@ class SyliusCoreExtension extends AbstractResourceExtension implements PrependEx
         'sylius_addressing',
         'sylius_inventory',
         'sylius_currency',
+        'sylius_contact',
         'sylius_locale',
         'sylius_payment',
         'sylius_payum',
@@ -48,11 +49,13 @@ class SyliusCoreExtension extends AbstractResourceExtension implements PrependEx
 
     protected $configFiles = array(
         'services',
+        'form',
         'templating',
         'twig',
     );
 
     private $emails = array(
+        'order_comment',
         'order_confirmation',
         'customer_welcome'
     );
